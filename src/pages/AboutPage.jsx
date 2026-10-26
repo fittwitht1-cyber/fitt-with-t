@@ -1,0 +1,177 @@
+import { useEffect, useRef, useState } from 'react'
+import portrait from '../assets/Portrait.jpeg'
+import gymFlip from '../assets/About Poortrait 3.jpeg'
+import gymPortraitWall from '../assets/About Portrait 2.jpeg'
+import gymFloorLeap from '../assets/WhatsApp Image 2026-06-10 at 8.30.29 PM.jpeg'
+import gymTrophy from '../assets/WhatsApp Image 2026-06-10 at 8.30.30 PM.jpeg'
+import gymVaultSit from '../assets/WhatsApp Image 2026-06-10 at 8.39.49 PM.jpeg'
+import gymPodium from '../assets/tommera-bars-podium.jpg'
+import gymMedals from '../assets/tommera-medals.jpg'
+import gymBeam from '../assets/tommera-beam.jpg'
+import DepthCarousel from '../components/DepthCarousel'
+import './About.css'
+
+/* Fixed carousel order (portrait leads). */
+const journeyPhotos = [
+  { image: portrait,        alt: 'Tommera, coach and founder of Fitt With T' },                     // 1
+  { image: gymFlip,         alt: 'Tommera mid-flip during a gymnastics competition' },              // 2
+  { image: gymPodium,       alt: 'Tommera sitting at the edge of the competition podium by the uneven bars' }, // 3
+  { image: gymTrophy,       alt: 'Tommera holding a trophy and medals after a competition' },       // 4
+  { image: gymPortraitWall, alt: 'Portrait of Tommera in her competition leotard against a brick wall' }, // 5
+  { image: gymBeam,         alt: 'Tommera mid-routine on the balance beam', fit: 'contain', background: '#000' }, // 6
+  { image: gymMedals,       alt: 'Tommera wearing her medals after a gymnastics competition' },     // 7
+  { image: gymFloorLeap,    alt: 'Tommera mid-leap during a floor routine' },                       // 8
+  { image: gymVaultSit,     alt: 'Tommera sitting on the vault in front of a competition crowd' },  // 9
+]
+
+export default function AboutPage({ onNavigate }) {
+  const rootRef = useRef(null)
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [])
+
+  /* Reveal-in: page-head animates on load (already in view), the split and
+     creed reveal as they scroll in. Skipped under prefers-reduced-motion,
+     where .reveal stays fully visible via the CSS fallback. */
+  useEffect(() => {
+    const root = rootRef.current
+    if (!root || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('in')
+            io.unobserve(e.target)
+          }
+        })
+      },
+      { threshold: 0.15 }
+    )
+    root.querySelectorAll('.reveal').forEach((el) => io.observe(el))
+    return () => io.disconnect()
+  }, [])
+
+  return (
+    <main className="about-page" ref={rootRef}>
+      <header className="page-head">
+        <div className="wrap">
+          <span className="eyebrow eyebrow--center reveal">About</span>
+          <h1 className="display reveal d1">Meet <em>Tommera</em></h1>
+          <p className="reveal d2">The coach behind Fitt With T.</p>
+        </div>
+      </header>
+
+      <section className="journey reveal">
+        <div className="journey-wrap">
+          <DepthCarousel
+            items={journeyPhotos}
+            cardWidth={isMobile ? 300 : 540}
+            cardHeight={isMobile ? 400 : 680}
+            depth={isMobile ? 140 : 220}
+            spread={isMobile ? 50 : 90}
+            tilt={22}
+            tiltDirection="right"
+            perspective={1400}
+            visibleCards={4}
+            falloff={0.2}
+            blur={6}
+            autoplay
+            loop
+            radius={18}
+            tint="transparent"
+            duration={700}
+            ease="power3.out"
+            autoplayDelay={3200}
+            showControls
+            showIndicators
+          />
+        </div>
+      </section>
+
+      <section className="about-story">
+        <div className="wrap">
+          <div className="story-copy reveal">
+            <span className="eyebrow">My Story</span>
+            <h2 className="display">Faith, fitness &amp; <em>purpose</em></h2>
+
+            <p className="lead">Hey, I&rsquo;m Tommera and I&rsquo;m really glad you are here.</p>
+
+            <p>
+              I&rsquo;ve spent most of my life in the world of fitness. I started out as a
+              gymnast, competing at both a national and international level for over 12
+              years, and it has shaped so much of who I am today. It taught me
+              discipline, resilience, and just how powerful the body and mind can be.
+              But more than anything, it gave me a real <strong>love</strong> for helping
+              others discover their own strength in a way that works for them.
+            </p>
+
+            <p>
+              Coming back from a serious injury and surgery showed me a completely
+              different side of fitness. I know first-hand how tough it can be to
+              rebuild, to start again, and to keep going when things feel hard.
+              That&rsquo;s why creating a space that feels{' '}
+              <strong>supportive, understanding, and freeing</strong> means so much to
+              me. Wherever you&rsquo;re starting from, I&rsquo;ll meet you there.
+            </p>
+
+            <p>
+              I work with people from all walks of life. Whether you&rsquo;re an
+              athlete, brand new to the gym, recovering from injury, or simply trying
+              to move more and feel better, you don&rsquo;t have to do it alone.{' '}
+              <strong>I&rsquo;ve got you.</strong> I&rsquo;ll be there to guide you,
+              support you, and keep you accountable every step of the way.
+            </p>
+
+            <p>
+              At the heart of it all, <em>your journey is entirely your own</em>. I&rsquo;m
+              here to encourage you through it, refining the process so it feels less
+              overwhelming and far more empowering.
+            </p>
+
+            <p className="sig">T</p>
+
+            <button className="btn btn-primary" onClick={() => onNavigate('book')}>
+              Train with me <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section className="creed">
+        <div className="wrap">
+          <div className="creed-head">
+            <span className="eyebrow eyebrow--center reveal">My Approach</span>
+            <h2 className="display reveal d1">Faith · Intention · Tenacity · <em>Testimonials</em></h2>
+          </div>
+
+          <div className="creed-grid">
+            <article className="creed-item reveal">
+              <span className="creed-n">i.</span>
+              <h3>Faith</h3>
+              <p>Keeping your bigger 'why' in view. We train with purpose, not just for appearances.</p>
+            </article>
+            <article className="creed-item reveal d1">
+              <span className="creed-n">ii.</span>
+              <h3>Intention</h3>
+              <p>Considered, progressive plans. Every rep is moving you somewhere specific.</p>
+            </article>
+            <article className="creed-item reveal d2">
+              <span className="creed-n">iii.</span>
+              <h3>Tenacity</h3>
+              <p>Encouragement and accountability so you stay consistent long enough to see change.</p>
+            </article>
+            <article className="creed-item reveal d3">
+              <span className="creed-n">iv.</span>
+              <h3>Testimonials</h3>
+              <p>Real stories from real people. The results speak for the method.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+  )
+}

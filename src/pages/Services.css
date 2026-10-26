@@ -1,0 +1,43 @@
+/* Coaching / Services page. Composes shared primitives + the reusable
+   ServiceCard; this file owns page-level layout only. Tokens for every value. */
+
+.services-page .page-head {
+  padding-top: calc(var(--u) * 13);
+  padding-bottom: calc(var(--u) * 3);
+  text-align: center;
+  background: radial-gradient(90% 130% at 50% 0%, var(--rose-soft), transparent 60%);
+}
+.services-page .page-head .display { margin-top: calc(var(--u) * 2); }
+.services-page .page-head p { color: var(--muted); max-width: 56ch; margin: calc(var(--u) * 2) auto 0; }
+/* first section sits close to the header so the cards lead the page */
+.services-page > section { padding-top: calc(var(--u) * 3); }
+
+.services-page .services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: calc(var(--u) * 3);
+  align-items: stretch;
+}
+
+.services-page .note {
+  text-align: center;
+  color: var(--muted);
+  font-size: .82rem;
+  font-style: italic;
+  margin-top: calc(var(--u) * 4);
+}
+
+/* ---- desktop: compact title + tighter cards so all three present fully ---- */
+@media (min-width: 900px) {
+  .services-page .page-head { padding-top: calc(var(--u) * 16); } /* clear the taller logo nav */
+  .services-page .page-head .display { font-size: var(--fs-h2); }
+  .services-page .service-card { padding: calc(var(--u) * 3) calc(var(--u) * 3.5); }
+  .services-page .service-card--featured { padding-top: calc(var(--u) * 5.5); } /* room for the top badge */
+  .services-page .service-card__desc { margin: calc(var(--u) * 1.75) 0; }
+  .services-page .service-card__incl { padding-top: calc(var(--u) * 2); margin-bottom: calc(var(--u) * 1.5); }
+}
+
+/* ---- responsive: 3-up → single column ---- */
+@media (max-width: 900px) {
+  .services-page .services-grid { grid-template-columns: 1fr; }
+}

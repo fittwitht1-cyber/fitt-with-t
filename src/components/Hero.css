@@ -1,0 +1,218 @@
+/* ====== Full-bleed Hero ====== */
+.hero {
+  position: relative;
+  min-height: 100svh;          /* svh = true full screen on mobile */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--cream);
+  background: var(--espresso);  /* base behind the media (and the dark panel on desktop) */
+}
+
+/* subtle scrim deepens the espresso base (so the rays pop) and darkens the
+   very bottom for the creed strip */
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg,
+      rgba(20, 15, 12, .30) 0%,
+      rgba(20, 15, 12, .10) 34%,
+      rgba(20, 15, 12, .22) 68%,
+      rgba(20, 15, 12, .62) 100%);
+}
+
+/* rose-gold light rays (ogl) stream over the silk + scrim, adding light
+   without washing out the type below them */
+.hero-rays {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ====== FIT-51 — centre block ====== */
+.hero-centre {
+  position: relative;
+  z-index: 3;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: calc(var(--u) * 3) calc(var(--u) * 3) calc(var(--u) * 8);
+  gap: calc(var(--u) * 4);
+}
+
+.hero-h1 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-reg);
+  line-height: 1.12;
+  font-size: clamp(2.1rem, 9vw, 3.4rem);
+  max-width: 13ch;
+  text-wrap: balance;
+}
+
+.hero-h1 em {
+  font-style: italic;
+  color: var(--rose);
+}
+
+.hero-sub {
+  font-size: .95rem;
+  color: rgba(255, 253, 251, .9);
+  max-width: 30ch;
+  font-weight: var(--fw-light);
+}
+
+/* legibility insurance for type sitting over the photo */
+.hero-h1,
+.hero-sub {
+  text-shadow: 0 2px 16px rgba(36, 28, 23, .55);
+}
+
+/* ====== FIT-54 — outlined CTA ====== */
+.btn-outline {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: var(--fw-reg);
+  font-size: .85rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: transparent;
+  border: 1px solid rgba(255, 253, 251, .85);
+  border-radius: var(--radius);
+  padding: calc(var(--u) * 2) calc(var(--u) * 5);
+  cursor: pointer;
+  transition:
+    background var(--t-med) var(--ease),
+    color var(--t-med) var(--ease),
+    border-color var(--t-med) var(--ease),
+    transform var(--t-med) var(--ease);
+}
+
+.btn-outline:hover,
+.btn-outline:focus-visible {
+  background: var(--rose);
+  border-color: var(--rose);
+  color: var(--cream);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.btn-outline:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* ====== Creed strip — plain type dissolving into the photo, no pills/bar ====== */
+.hero-creed {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: calc(var(--u) * 1.5);
+  padding: calc(var(--u) * 4) calc(var(--u) * 2) calc(var(--u) * 4);
+  flex-wrap: nowrap;
+}
+
+/* soft gradient underneath the words — reads as the photo's own vignette
+   deepening, not a UI panel; keeps the type legible without a background shape */
+.hero-creed::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--u) * -6) 0 calc(var(--u) * -3);
+  background: linear-gradient(0deg, rgba(36, 28, 23, .78) 0%, rgba(36, 28, 23, .5) 55%, transparent 100%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.hero-creed__item {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--u) * .6);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: .82rem;
+  letter-spacing: .02em;
+  color: var(--cream);
+  text-shadow: 0 2px 12px rgba(36, 28, 23, .65), 0 1px 4px rgba(36, 28, 23, .85);
+}
+
+.hero-creed__dot {
+  font-size: .6em;
+  color: var(--gold);
+}
+/* alternate the accent dot rose/gold — a callback to the home marquee */
+.hero-creed__item:nth-child(even) .hero-creed__dot { color: var(--rose); }
+
+/* ====== FIT-52 — staggered entrance (text follows the photo) ====== */
+.rise {
+  opacity: 0;
+  transform: translateY(18px);
+}
+.hero--reveal .rise { animation: rise .9s var(--ease) forwards; }
+.hero--reveal .rise.d1 { animation-delay: .7s; }
+.hero--reveal .rise.d2 { animation-delay: .85s; }
+.hero--reveal .rise.d3 { animation-delay: 1s; }
+.hero--reveal .rise.d4 { animation-delay: 1.15s; }
+
+@keyframes rise {
+  to { opacity: 1; transform: none; }
+}
+
+/* honour reduced-motion — must reset opacity, since tokens.css globally
+   forces `animation:none !important` (otherwise content stays invisible). */
+@media (prefers-reduced-motion: reduce) {
+  .rise { animation: none; opacity: 1; transform: none; }
+  .hero-media { opacity: 1; }
+}
+
+/* ====== Desktop — centred text-only hero on the espresso gradient ====== */
+@media (min-width: 900px) {
+  /* warm radial glow adds depth so the gradient isn't flat (vertical base,
+     no diagonal banding) */
+  .hero {
+    background:
+      radial-gradient(70% 60% at 50% 20%, rgba(179, 112, 92, .16), transparent 62%),
+      linear-gradient(180deg, #2c231d 0%, var(--espresso) 58%, #1f1813 100%);
+  }
+
+  .hero-centre {
+    align-items: center;
+    text-align: center;
+    max-width: 60ch;
+    margin: 0 auto;
+    gap: calc(var(--u) * 3.5);
+    padding: calc(var(--u) * 14) calc(var(--u) * 4) calc(var(--u) * 10);
+  }
+  .hero-h1 {
+    font-size: clamp(3.2rem, 5.2vw, 4.6rem);
+    max-width: 15ch;
+  }
+  .hero-sub {
+    font-size: 1.1rem;
+    max-width: 40ch;
+  }
+  .btn-outline {
+    padding: calc(var(--u) * 2.25) calc(var(--u) * 6);
+  }
+
+  /* creed centred across the hero, a touch larger */
+  .hero-creed {
+    justify-content: center;
+    gap: calc(var(--u) * 4);
+    padding: calc(var(--u) * 4) calc(var(--u) * 4) calc(var(--u) * 5);
+  }
+  .hero-creed__item {
+    font-size: 1.3rem;
+  }
+}
